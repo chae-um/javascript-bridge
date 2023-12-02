@@ -1,3 +1,4 @@
+import Bridge from '../model/Bridge.js';
 import InputView from '../view/InputView.js';
 import OutputView from '../view/OutputView.js';
 
@@ -16,7 +17,13 @@ class BridgeGame {
 
   async startGame() {
     this.#outputView.printStart();
-    const bridgeSize = await this.#handleError(() => this.#inputView.readBridgeSize());
+    const bridgeSize = await this.#handleError(() => this.#readBridgeSize());
+  }
+
+  async #readBridgeSize() {
+    const bridgeSize = await this.#inputView.readBridgeSize();
+
+    return Bridge.of(Number(bridgeSize));
   }
 
   /**
