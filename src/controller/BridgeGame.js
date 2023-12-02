@@ -1,17 +1,22 @@
+import InputView from '../view/InputView.js';
 import OutputView from '../view/OutputView.js';
 
 /**
  * 다리 건너기 게임을 관리하는 클래스
  */
 class BridgeGame {
+  #inputView;
+
   #outputView;
 
   constructor() {
+    this.#inputView = InputView;
     this.#outputView = OutputView;
   }
 
-  startGame() {
+  async startGame() {
     this.#outputView.printStart();
+    const bridgeSize = await this.#inputView.readBridgeSize();
   }
 
   /**
