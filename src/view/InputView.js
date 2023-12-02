@@ -1,4 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
+import { validateEmptyString } from '../utils/validators/index.js';
 
 const INPUT_MESSAGE = {
   bridgeSize: '다리의 길이를 입력해주세요.\n',
@@ -17,6 +18,8 @@ const InputView = {
    */
   async readBridgeSize() {
     const bridgeSize = await Console.readLineAsync(INPUT_MESSAGE.bridgeSize);
+
+    validateEmptyString(bridgeSize);
 
     return bridgeSize;
   },
