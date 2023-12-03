@@ -1,4 +1,5 @@
 import Bridge from '../model/Bridge.js';
+import MovingValidator from '../utils/validators/Moving.js';
 import InputView from '../view/InputView.js';
 import OutputView from '../view/OutputView.js';
 
@@ -46,6 +47,8 @@ class BridgeGame {
 
   async #readMoving() {
     const moving = await this.#inputView.readMoving();
+
+    MovingValidator.check(moving);
 
     return moving;
   }
