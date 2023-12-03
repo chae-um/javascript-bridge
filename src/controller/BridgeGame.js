@@ -17,6 +17,10 @@ class BridgeGame {
 
   static QUIT = 'Q';
 
+  static SUCCESS = '성공';
+
+  static FAILURE = '실패';
+
   constructor() {
     this.#inputView = InputView;
     this.#outputView = OutputView;
@@ -28,7 +32,7 @@ class BridgeGame {
     const bridge = await this.getBridge();
     const result = await this.#move(bridge);
 
-    this.#outputView.printResult(result, this.#model.getTryCount(), '성공');
+    this.#outputView.printResult(result, this.#model.getTryCount(), BridgeGame.SUCCESS);
   }
 
   async getBridge() {
@@ -93,7 +97,7 @@ class BridgeGame {
     const gameCommand = await this.#handleError(() => this.#readGameCommand());
 
     if (gameCommand === BridgeGame.QUIT) {
-      this.#outputView.printResult(bridgeState, this.#model.getTryCount(), '실패');
+      this.#outputView.printResult(bridgeState, this.#model.getTryCount(), BridgeGame.FAILURE);
     } else {
       this.#model.retry();
       await this.#move(bridge);
