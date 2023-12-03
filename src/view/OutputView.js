@@ -23,8 +23,21 @@ const OutputView = {
    * 현재까지 이동한 다리의 상태를 정해진 형식에 맞춰 출력한다.
    * <p>
    * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
+   * @param {object} bridgeState
+   * @property {string[]} up - 다리 위의 상태
+   * @property {string[]} down - 다리 아래의 상태
    */
-  printMap() {},
+  printMap(bridgeState) {
+    const bridgeMapUp = this.convertBridgeMap(bridgeState.up);
+    const bridgeMapDown = this.convertBridgeMap(bridgeState.down);
+
+    this.print(bridgeMapUp);
+    this.print(bridgeMapDown);
+  },
+
+  convertBridgeMap(arr) {
+    return `[ ${arr.join(' | ')} ]`;
+  },
 
   /**
    * 게임의 최종 결과를 정해진 형식에 맞춰 출력한다.
