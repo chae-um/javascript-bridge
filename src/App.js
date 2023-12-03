@@ -1,5 +1,9 @@
-class App {
-  play() {}
+import BridgeController from './controller/BridgeController.js';
+
+export default class App {
+  play() {
+    BridgeController.of().start();
+  }
 }
 
-export default App;
+new App().play();
