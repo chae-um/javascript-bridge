@@ -17,7 +17,14 @@ class BridgeGame {
 
   async startGame() {
     this.#outputView.printStart();
+    const bridge = await this.getBridge();
+  }
+
+  async getBridge() {
     const bridgeSize = await this.#handleError(() => this.#readBridgeSize());
+    const bridge = bridgeSize.makeBridge();
+
+    return bridge;
   }
 
   async #readBridgeSize() {
