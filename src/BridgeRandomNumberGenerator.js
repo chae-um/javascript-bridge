@@ -1,4 +1,4 @@
-import MissionUtils from '@woowacourse/mission-utils';
+const MissionUtils = require('@woowacourse/mission-utils');
 
 const BridgeRandomNumberGenerator = {
   RANDOM_LOWER_INCLUSIVE: 0,
@@ -6,9 +6,9 @@ const BridgeRandomNumberGenerator = {
   generate() {
     return MissionUtils.Random.pickNumberInRange(
       BridgeRandomNumberGenerator.RANDOM_LOWER_INCLUSIVE,
-      BridgeRandomNumberGenerator.RANDOM_UPPER_INCLUSIVE
+      BridgeRandomNumberGenerator.RANDOM_UPPER_INCLUSIVE,
     );
   },
 };
 
-export default BridgeRandomNumberGenerator;
+module.exports = BridgeRandomNumberGenerator;

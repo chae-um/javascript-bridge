@@ -1,5 +1,13 @@
+const BridgeController = require('./Controller/BridgeController');
+
 class App {
-  play() {}
+  play() {
+    const controller = new BridgeController();
+    controller.start();
+  }
 }
 
-export default App;
+const app = new App();
+app.play();
+
+module.exports = App;
