@@ -12,11 +12,17 @@ class Move {
 
   static FAIL = 'X';
 
+  getBridgeState(moving, bridge) {
+    this.#move(moving, bridge);
+
+    return this.#bridgeState;
+  }
+
   /**
    * @param {string} moving 'U' or 'D'
    * @param {string[]} bridge
    */
-  move(moving, bridge) {
+  #move(moving, bridge) {
     const isUp = bridge[this.#bridgeState.up.length] === Move.UP;
 
     if (this.#canMove(moving, bridge)) {
@@ -24,10 +30,6 @@ class Move {
     } else {
       this.#failProcess(isUp);
     }
-  }
-
-  getBridgeState() {
-    return this.#bridgeState;
   }
 
   #passProcess(isUp) {

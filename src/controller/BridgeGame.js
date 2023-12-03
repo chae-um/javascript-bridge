@@ -49,9 +49,14 @@ class BridgeGame {
   async #move(bridge) {
     while (true) {
       const moving = await this.#handleError(() => this.#readMoving());
+      const bridgeState = this.#model.getBridgeState(moving, bridge);
 
-      this.#model.move(moving, bridge);
-      this.#printBridgeState(this.#model.getBridgeState());
+      this.#printBridgeState(bridgeState);
+      if (bridgeState.up.at(-1) === 'X' || bridgeState.down.at(-1) === 'X') {
+        await this.#retry();
+        break;
+      }
+      if (this.#model.getBridgeState().up.length === bridge.length) break;
     }
   }
 
@@ -72,7 +77,15 @@ class BridgeGame {
    * <p>
    * 재시작을 위해 필요한 메서드의 반환 값(return value), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
    */
-  retry() {}
+  async #retry() {
+    const gameCommand = await this.#handleError(() => this.#readGameCommand());
+  }
+
+  async #readGameCommand() {
+    const gameCommand = await this.#inputView.readGameCommand();
+
+    return gameCommand;
+  }
 
   async #handleError(callback) {
     try {
