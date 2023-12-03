@@ -26,8 +26,7 @@ class BridgeGame {
   async startGame() {
     this.#outputView.printStart();
     const bridge = await this.getBridge();
-
-    await this.#move(bridge);
+    const result = await this.#move(bridge);
   }
 
   async getBridge() {
@@ -50,17 +49,15 @@ class BridgeGame {
    * @param {string[]} bridge
    */
   async #move(bridge) {
-    this.#model.increaseCount();
     while (true) {
       const moving = await this.#handleError(() => this.#readMoving());
       const bridgeState = this.#model.getBridgeState(moving, bridge);
-
       this.#printBridgeState(bridgeState);
       if (bridgeState.up.at(-1) === 'X' || bridgeState.down.at(-1) === 'X') {
-        await this.#retry(bridgeState);
+        await this.#retry(bridgeState, bridge);
         break;
       }
-      if (bridgeState.up.length === bridge.length) break;
+      if (bridgeState.up.length === bridge.length) return bridgeState;
     }
   }
 
@@ -81,12 +78,16 @@ class BridgeGame {
    * <p>
    * 재시작을 위해 필요한 메서드의 반환 값(return value), 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
    * @param bridgeState
+   * @param bridge
    */
-  async #retry(bridgeState) {
+  async #retry(bridgeState, bridge) {
     const gameCommand = await this.#handleError(() => this.#readGameCommand());
 
     if (gameCommand === BridgeGame.QUIT) {
       this.#outputView.printResult(bridgeState, this.#model.getTryCount(), '실패');
+    } else {
+      this.#model.retry();
+      this.#move(bridge);
     }
   }
 
