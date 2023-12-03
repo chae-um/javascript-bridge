@@ -4,6 +4,8 @@ class Move {
     down: [],
   };
 
+  #tryCount = 0;
+
   static UP = 'U';
 
   static EMPTY = ' ';
@@ -61,6 +63,14 @@ class Move {
   #push(upPush, downPush) {
     this.#bridgeState.up.push(upPush);
     this.#bridgeState.down.push(downPush);
+  }
+
+  increaseCount() {
+    this.#tryCount += 1;
+  }
+
+  getTryCount() {
+    return this.#tryCount;
   }
 }
 
