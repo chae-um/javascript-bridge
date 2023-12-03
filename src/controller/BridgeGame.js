@@ -1,5 +1,6 @@
 import Bridge from '../model/Bridge.js';
 import Move from '../model/Move.js';
+import GameCommandValidator from '../utils/validators/GameCommand.js';
 import MovingValidator from '../utils/validators/Moving.js';
 import InputView from '../view/InputView.js';
 import OutputView from '../view/OutputView.js';
@@ -56,7 +57,7 @@ class BridgeGame {
         await this.#retry();
         break;
       }
-      if (this.#model.getBridgeState().up.length === bridge.length) break;
+      if (bridgeState.up.length === bridge.length) break;
     }
   }
 
@@ -83,6 +84,8 @@ class BridgeGame {
 
   async #readGameCommand() {
     const gameCommand = await this.#inputView.readGameCommand();
+
+    GameCommandValidator.check(gameCommand);
 
     return gameCommand;
   }
