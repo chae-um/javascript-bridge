@@ -52,15 +52,22 @@ class BridgeGame {
    */
   async #move(bridge) {
     while (true) {
-      const moving = await this.#handleError(() => this.#readMoving());
-      const bridgeState = this.#model.getBridgeState(moving, bridge);
-      this.#printBridgeState(bridgeState);
+      const bridgeState = await this.#getBridgeState(bridge);
       if (bridgeState.up.at(-1) === 'X' || bridgeState.down.at(-1) === 'X') {
         await this.#retry(bridgeState, bridge);
         break;
       }
       if (bridgeState.up.length === bridge.length) return bridgeState;
     }
+  }
+
+  async #getBridgeState(bridge) {
+    const moving = await this.#handleError(() => this.#readMoving());
+    const bridgeState = this.#model.getBridgeState(moving, bridge);
+
+    this.#printBridgeState(bridgeState);
+
+    return bridgeState;
   }
 
   async #readMoving() {
@@ -89,7 +96,7 @@ class BridgeGame {
       this.#outputView.printResult(bridgeState, this.#model.getTryCount(), '실패');
     } else {
       this.#model.retry();
-      this.#move(bridge);
+      await this.#move(bridge);
     }
   }
 
