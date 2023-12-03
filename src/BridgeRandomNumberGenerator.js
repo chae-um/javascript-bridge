@@ -1,12 +1,11 @@
-import MissionUtils from '@woowacourse/mission-utils';
+import { Random } from '@woowacourse/mission-utils';
+import { RANDOM_NUMBER_RANGE } from './constant/BridgeGameOption.js';
 
 const BridgeRandomNumberGenerator = {
-  RANDOM_LOWER_INCLUSIVE: 0,
-  RANDOM_UPPER_INCLUSIVE: 1,
   generate() {
-    return MissionUtils.Random.pickNumberInRange(
-      BridgeRandomNumberGenerator.RANDOM_LOWER_INCLUSIVE,
-      BridgeRandomNumberGenerator.RANDOM_UPPER_INCLUSIVE
+    return Random.pickNumberInRange(
+      RANDOM_NUMBER_RANGE.min,
+      RANDOM_NUMBER_RANGE.max
     );
   },
 };
