@@ -1,3 +1,5 @@
+import SYSTEM from '../constants/System.js';
+
 class Move {
   #bridgeState = {
     up: [],
@@ -6,13 +8,7 @@ class Move {
 
   #tryCount = 1;
 
-  static UP = 'U';
-
   static EMPTY = ' ';
-
-  static PASS = 'O';
-
-  static FAIL = 'X';
 
   getBridgeState(moving, bridge) {
     this.#move(moving, bridge);
@@ -25,7 +21,7 @@ class Move {
    * @param {string[]} bridge
    */
   #move(moving, bridge) {
-    const isUp = bridge[this.#bridgeState.up.length] === Move.UP;
+    const isUp = bridge[this.#bridgeState.up.length] === SYSTEM.up;
 
     if (this.#canMove(moving, bridge)) {
       this.#passProcess(isUp, moving);
@@ -35,15 +31,15 @@ class Move {
   }
 
   #passProcess(isUp) {
-    const upPush = this.#draw(isUp, Move.PASS);
-    const downPush = this.#draw(!isUp, Move.PASS);
+    const upPush = this.#draw(isUp, SYSTEM.pass);
+    const downPush = this.#draw(!isUp, SYSTEM.pass);
 
     this.#push(upPush, downPush);
   }
 
   #failProcess(isUp) {
-    const upPush = this.#draw(!isUp, Move.FAIL);
-    const downPush = this.#draw(isUp, Move.FAIL);
+    const upPush = this.#draw(!isUp, SYSTEM.fail);
+    const downPush = this.#draw(isUp, SYSTEM.fail);
 
     this.#push(upPush, downPush);
   }

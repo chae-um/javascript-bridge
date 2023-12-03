@@ -1,3 +1,4 @@
+import SYSTEM from '../constants/System.js';
 import Bridge from '../model/Bridge.js';
 import Move from '../model/Move.js';
 import GameCommandValidator from '../utils/validators/GameCommand.js';
@@ -14,8 +15,6 @@ class BridgeGame {
   #outputView;
 
   #model;
-
-  static QUIT = 'Q';
 
   static SUCCESS = '성공';
 
@@ -57,7 +56,7 @@ class BridgeGame {
   async #move(bridge) {
     while (true) {
       const bridgeState = await this.#getBridgeState(bridge);
-      if (bridgeState.up.at(-1) === 'X' || bridgeState.down.at(-1) === 'X') {
+      if (bridgeState.up.at(-1) === SYSTEM.fail || bridgeState.down.at(-1) === SYSTEM.fail) {
         await this.#retry(bridgeState, bridge);
         break;
       }
@@ -96,7 +95,7 @@ class BridgeGame {
   async #retry(bridgeState, bridge) {
     const gameCommand = await this.#handleError(() => this.#readGameCommand());
 
-    if (gameCommand === BridgeGame.QUIT) {
+    if (gameCommand === SYSTEM.quit) {
       this.#outputView.printResult(bridgeState, this.#model.getTryCount(), BridgeGame.FAILURE);
     } else {
       this.#model.retry();
