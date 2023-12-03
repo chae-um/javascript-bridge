@@ -27,6 +27,8 @@ class BridgeGame {
     this.#outputView.printStart();
     const bridge = await this.getBridge();
     const result = await this.#move(bridge);
+
+    this.#outputView.printResult(result, this.#model.getTryCount(), '성공');
   }
 
   async getBridge() {
