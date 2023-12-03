@@ -1,18 +1,20 @@
-import MissionUtils from '@woowacourse/mission-utils';
+import { MissionUtils } from '@woowacourse/mission-utils';
 import App from '../src/App.js';
-import BridgeMaker from '../src/BridgeMaker';
+import BridgeMaker from '../src/BridgeMaker.js';
 
-const mockQuestions = (answers) => {
-  MissionUtils.Console.readLine = jest.fn();
-  answers.reduce((acc, input) => {
-    return acc.mockImplementationOnce((_, callback) => {
-      callback(input);
-    });
-  }, MissionUtils.Console.readLine);
+const mockQuestions = (inputs) => {
+  MissionUtils.Console.readLineAsync = jest.fn();
+
+  MissionUtils.Console.readLineAsync.mockImplementation(() => {
+    const input = inputs.shift();
+
+    return Promise.resolve(input);
+  });
 };
 
 const mockRandoms = (numbers) => {
   MissionUtils.Random.pickNumberInRange = jest.fn();
+
   numbers.reduce((acc, number) => {
     return acc.mockReturnValueOnce(number);
   }, MissionUtils.Random.pickNumberInRange);
@@ -21,6 +23,7 @@ const mockRandoms = (numbers) => {
 const getLogSpy = () => {
   const logSpy = jest.spyOn(MissionUtils.Console, 'print');
   logSpy.mockClear();
+
   return logSpy;
 };
 
@@ -28,19 +31,21 @@ const getOutput = (logSpy) => {
   return [...logSpy.mock.calls].join('');
 };
 
-const runException = (inputs) => {
-  mockQuestions(inputs);
+const runException = async (input) => {
   const logSpy = getLogSpy();
-  const app = new App();
 
-  app.play();
+  mockRandoms([1, 0, 1]);
+  mockQuestions([input, '3', 'U', 'D', 'U']);
+
+  const app = new App();
+  await app.play();
 
   expectLogContains(getOutput(logSpy), ['[ERROR]']);
 };
 
-const expectLogContains = (received, logs) => {
-  logs.forEach((log) => {
-    expect(received).toEqual(expect.stringContaining(log));
+const expectLogContains = (received, expectedLogs) => {
+  expectedLogs.forEach((log) => {
+    expect(received).toContain(log);
   });
 };
 
@@ -62,13 +67,14 @@ describe('다리 건너기 테스트', () => {
     expect(bridge).toEqual(['U', 'D', 'D']);
   });
 
-  test('기능 테스트', () => {
+  test('기능 테스트', async () => {
     const logSpy = getLogSpy();
+
     mockRandoms([1, 0, 1]);
     mockQuestions(['3', 'U', 'D', 'U']);
 
     const app = new App();
-    app.play();
+    await app.play();
 
     const log = getOutput(logSpy);
     expectLogContains(log, [
@@ -80,8 +86,10 @@ describe('다리 건너기 테스트', () => {
     ]);
     expectBridgeOrder(log, '[ O |   | O ]', '[   | O |   ]');
   });
+});
 
-  test('예외 테스트', () => {
-    runException(['a']);
+describe('예외 테스트', () => {
+  test('예외 테스트', async () => {
+    await runException('a');
   });
 });
